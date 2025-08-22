@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      text-align: center;
+      padding: 20px;
+    }
+    #quiz-box {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    .option {
+      display: block;
+      margin: 10px 0;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #007BFF;
+      color: white;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="quiz-box">
+    <h2 id="question">Loading question...</h2>
+    <div id="options"></div>
+    <button onclick="submitAnswer()">Submit</button>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is the capital of France?",
+        options: ["Berlin", "Madrid", "Paris", "Rome"],
+        answer: "Paris"
+      },
+      {
+        question: "Which language runs in a web browser?",
+        options: ["Python", "Java", "C++", "JavaScript"],
+        answer: "JavaScript"
+      },
+      {
+        question: "What is 2 + 2?",
+        options: ["3", "4", "5", "22"],
+        answer: "4"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      if (currentQuestion < quizData.length) {
+        let q = quizData[currentQuestion];
+        document.getElementById("question").innerText = q.question;
+
+        let optionsHTML = "";
+        q.options.forEach(opt => {
+          optionsHTML += `
+            <label class="option">
+              <input type="radio" name="option" value="${opt}"> ${opt}
+            </label>
+          `;
+        });
+
+        document.getElementById("options").innerHTML = optionsHTML;
+      } else {
+        // Show result page
+        document.getElementById("quiz-box").innerHTML = `
+          <h2>Quiz Completed!</h2>
+          <p>Your Score: ${score} / ${quizData.length}</p>
+        `;
+      }
+    }
+
+    function submitAnswer() {
+      let selected = document.querySelector('input[name="option"]:checked');
+      if (selected) {
+        if (selected.value === quizData[currentQuestion].answer) {
+          score++;
+        }
+        currentQuestion++;
+        loadQuestion();
+      } else {
+        alert("Please select an option!");
+      }
+    }
+
+    // Load first question when page loads
+    loadQuestion();
+  </script>
+
+</body>
+</html>
